@@ -47,22 +47,22 @@
 				oRequest.send(null);
 
 				if (oRequest.status == 200) {
-					//alert(oRequest.responseText); //check of er wat terug komt
+					//alert(oRequest.responseText); // Check if anything is return
 					text = oRequest.responseText;
-					// strip de html body tags
+					// Strip the HTML body tags
 					t = text.search("<body>") + 6;
 					t_end = text.search("</body>");
 					text = text.slice(t, t_end);
-					// strip de wegentag
+					// Strip the way tag
 					t = text.search("</h2>") + 5;
-					if (t<5){ // geen wegen gevonden
+					if (t<5){ // No ways found
 					text = "<br><font color=\"red\"> <b>no ways found</b><br>";
 					}
 					else{
 					text = text.slice(t, t_end);
-					}					
-					// zoek naar nummers met meer dan 5 cijfers ( de ref's )
-					// functie die weg id's vervangt door een link naar osm
+					}
+					// Search for number with more than 5 digits ( the ref's )
+					// The function replace the path ID by a link to OSM
 					function addlink(match) {
 						s = "<a href=\"http://www.openstreetmap.org/browse/" + match.match(/node|way|relation/i) + "\/" + match.match(/[0-9]{2,}/) + "\" target=\"_blank\">" + match + "</a>";
 						return s.toLowerCase();
@@ -73,7 +73,7 @@
 					text = text.replace(zoek, addlink);
 					var zoek = /Relation [0-9]{4,}/g;
 					text = text.replace(zoek, addlink);
-					// de id's zijn nu links
+					// De IDs are now links
 					link = link + "<span STYLE=\"font-size: 8pt;\">" + text + "</span>";
 					map.removePopup(popup);
 					popup.contentHTML = link;
@@ -148,7 +148,7 @@
 	, CLASS_NAME : "ZoomLimitedBBOXStrategy"
 	}
 	);
-	// ------------------------- originele layer -----------------------------------------------------------------------
+	// ------------------------- Original layer -----------------------------------------------------------------------
 	function make_large_layer(data_url, color, name, zoom, size, visible, dash, opacity, radius, radopacity) {
 	var styleMap =  new OpenLayers.StyleMap( {
 		strokeColor : color, strokeOpacity : opacity, strokeWidth : size, strokeLinecap : "square", strokeDashstyle : dash, pointRadius : radius, fillColor : "white", fillOpacity : radopacity
@@ -167,7 +167,7 @@
 	layer.events.register("loadend", layer, make_features_added_closure());
 	return layer;
 	}
-	
+
 	function make_layer(data_url, color, name, size, visible, dash) {
 	// ----- opacity catch in dash, if dash = "4 3@1.0" 1.0 is used as opacity
 	if (dash != undefined) {
@@ -184,7 +184,7 @@
 		dash = "solid";
 		opacity = 0.75;
 	}
-	//calculate seperate radius if given	
+	//calculate seperate radius if given
 	var radius = (size - Math.floor(size)) * 10;
 	if (radius <= 0) {
 		radius = size;
@@ -193,7 +193,7 @@
 	else {
 		radopacity = opacity;
 	}
-	//---- add an image if specified by  placehoder in name, placeholders are #l# > single line, #dl#>line line,#d#>dotted 
+	//---- add an image if specified by  placehoder in name, placeholders are #l# > single line, #dl#>line line,#d#>dotted
 	//	alert(name);
 	name = name.replace("#l#", "<img style='vertical-align: middle;background-color: " + color + ";' src='img/line.gif'>&nbsp");
 	name = name.replace("#dl#", "<img style='vertical-align: middle;background-color: " + color + ";' src='img/lineline.gif'>&nbsp");
@@ -201,8 +201,8 @@
 	name = name.replace("#c#", "<img style='vertical-align: middle;background-color: " + color + ";' src='img/tcircle.gif'>&nbsp");
 	return make_large_layer(data_url, color, name, 13, size, visible, dash, opacity, radius, radopacity);
 	}
-	
-//--- dit blok is nieuw -----------------------------
+
+//--- This block is new -----------------------------
 	function make_label(feature) {
 		if (feature != undefined) {
 			feature.attributes.display = "";
@@ -219,7 +219,7 @@
 			if (feature.attributes.rcn_ref != undefined) {
 				feature.attributes.display = feature.attributes.rcn_ref;
 			}
-			//fietswinkels cafes etc
+			//bike shops, cafes etc
 			else if (feature.attributes.ref != undefined) {
 				feature.attributes.display = feature.attributes.ref;
 			}
@@ -290,7 +290,7 @@
 			}
 			)
 		}
-		), 
+		),
 		styleMap :  new OpenLayers.StyleMap(localstyle),
 		visibility : visible,
 		projection :  new OpenLayers.Projection("EPSG:4326")
@@ -301,7 +301,7 @@
 	//alert(layer.name);
 	return layer;
 	}
-	
+
 	function make_a_layer(data_url, color, name, size, visible, dash) {
 	// ----- opacity catch in dash, if dash = "4 3@1.0" 1.0 is used as opacity
 	if (dash != undefined) {
@@ -318,7 +318,7 @@
 		dash = "solid";
 		opacity = 0.75;
 	}
-	//calculate seperate radius if given	
+	//calculate seperate radius if given
 	var radius = (size - Math.floor(size)) * 10;
 	if (radius <= 0) {
 		radius = size;
@@ -327,7 +327,7 @@
 	else {
 		radopacity = opacity;
 	}
-	//---- add an image if specified by  placehoder in name, placeholders are #l# > single line, #dl#>line line,#d#>dotted 
+	//---- add an image if specified by  placehoder in name, placeholders are #l# > single line, #dl#>line line,#d#>dotted
 	//	alert(name);
 	name = name.replace("#l#", "<img style='vertical-align: middle;background-color: " + color + ";' src='img/line.gif'>&nbsp");
 	name = name.replace("#dl#", "<img style='vertical-align: middle;background-color: " + color + ";' src='img/lineline.gif'>&nbsp");
@@ -336,13 +336,13 @@
 	name = name.replace("#co#", "<img style='vertical-align: middle;background-color: " + color + ";' src='img/tocircle.gif'>&nbsp");
 	return make_a_large_layer(data_url, color, name, 13, size, visible, dash, opacity, radius, radopacity);
 	}
-	
-// ------------ eind van het nieuwe blok
 
-// ----------------------------- switchtab code-- 
+// ------------ End of the new block
+
+// ----------------------------- Switchtab code--
 function switchtab(newtab, activetab) { // was switchlayers(newlayer,active)
 
-// this destroys all layers that are not baselayers 
+// this destroys all layers that are not baselayers
 // and construct a list of visable layers in the current view
 
 tabtype[activetab] = "";
@@ -386,7 +386,7 @@ plink.updateLink();
 }
 
 
-	// update zoomindicatie
+	// update Zoom indication
 	function showZoom(zoom) {
 	document.getElementById("zoom").innerHTML = map.Getzoom();
 	}
@@ -396,7 +396,7 @@ plink.updateLink();
 			lon = position.coords.longitude;
 			map.setCenter(new OpenLayers.LonLat(lon,lat).transform(map.displayProjection,map.projection), 16);
 		};
-			
+
 	function getPos(){
 
 		if (navigator.geolocation) {
@@ -406,7 +406,7 @@ plink.updateLink();
 			//navigator.geolocation.getCurrentPosition(showPosition, null, geo_options);
 			};
 		};
-			
+
 	function noPos(ercode) {
 		alert("Unable to get location");
 		//map.setCenter(new window.OpenLayers.LonLat(lon,lat).transform(map.displayProjection,map.projection), zoom);
